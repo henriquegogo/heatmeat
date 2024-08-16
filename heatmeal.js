@@ -39,7 +39,7 @@
         el.dispatchEvent(new Event("load"));
       }))
       .catch((err) => targetElements.forEach((el) =>
-        el.dispatchEvent(new ErrorEvent("error", err)))
+        el.dispatchEvent(new ErrorEvent("error", { message: err })))
       );
   });
 });
