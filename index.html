@@ -13,33 +13,46 @@
       header h1 { font-size: 3rem; text-align: center; }
       header h3 { text-align: center; }
       main { margin: 0 auto; padding: 30px 10px; max-width: 700px; }
+      footer { padding: 10px 10px; font-size: 0.8rem; text-align: center; background:#2e2e2e; border-top: 2px solid #444; }
       h1, h2, h3, h4, h5, h6 { font-weight: 500; color: #FFF; }
+      h2, h3 { margin-top: 50px; }
       a { color: #CCC; }
       button, input[type=submit] {
-        padding: 10px 20px;
-        font-family: inherit; font-size: 1.0rem; color: #CCC;
-        cursor: pointer; background: #333; border: none;
+        padding: 10px 20px; font-family: inherit; font-size: 1.0rem; color: #CCC;
+        cursor: pointer; background: #333; border: none; box-shadow: 4px 4px 0 #444;
       }
+      button:active, input[type=submit]:active { margin: 4px -4px -4px 4px; background: #444; box-shadow: none; }
       code { padding: 1px 4px; font-size: 0.9rem; font-weight: bold; border: 1px solid #DDD; }
-      .red { color: #B22; }
+      .red { color: #B22 !important; }
       .gray { color: #555; }
       .inline-block { display: inline-block; }
-      .example { padding: 25px; color: #FFF; background: #333; }
+      .example { margin: 10px 0; padding: 25px; color: #FFF; background: #333 }
     </style>
     <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".highlight").forEach((element) => {
+      function highlight(selector) {
+        document.querySelectorAll(selector).forEach((element) => {
           Object.assign(element.style, {
             backgroundColor: "#333", color: "#FFF", fontFamily: "monospace", padding: "25px", whiteSpace: "pre-wrap"
           });
-          element.innerHTML = element.innerHTML
+          element.innerHTML = element.innerHTML.startsWith("&lt;")
+            ? element.innerHTML
             .replace(/(&lt;!--.+--&gt;)/gs, "<span style =color:#808080>$1</span>") // Comments
             .replace(/(\w+)=/g, "<span style =color:#87afd7>$1</span>=") // Attributes
             .replace(/([^>])(")(.*?)(")|([^>])(')(.*?)(')/g, "$1<span style =color:#afd700>$2$3$4</span>") // Strings
             .replace(/&lt;(\w*)/g, "<span style =color:#87afd7>&lt;</span><span style =color:#8787af>$1</span>") // Tag open
             .replace(/(\w*)&gt;/g, "<span style =color:#8787af>$1</span><span style =color:#87afd7>&gt;</span>") // Tag close
-        });
-      });
+            : element.innerHTML
+            .replace(/(\/\/ .+|# .+)/g, "<span style =color:#808080>$1</span>") // Comments
+            .replace(/(\/\*.+\*\/)/gs, "<span style =color:#808080>$1</span>") // Comments
+            .replace(/([^\w]|^)(struct|var|let|const|new|def|fn|class|function|int|enum|void|float|char|str|string|public|pub|private|interface|impl|from|import|with)([^\w])/g, "$1<span style =color:#87afd7>$2</span>$3") // Declarations
+            .replace(/([^\w]|^| )(=>|===|==|!=|<=|>=|\+=|-=|\+|-|\/|\*|=|return|if|else|elsif|then|switch|case|default|while|for|foreach|in|of|or|and|not|try|except|finally|throw|catch)([^\w])/g, "$1<span style =color:#8787af>$2</span>$3") // Statements
+            .replace(/([^\w]|^)(true|false|True|False|None|Null|NULL|this|self|document|window|console|Math|[A-Z_]{3,})([^\w])/g, "$1<span style =color:#ff8700>$2</span>$3") // Consts and keywords
+            .replace(/(\w+)\(/g, "<span style =color:#ffffaf>$1</span>(") // Functions
+            .replace(/: ("|')(.*?)("|')/g, ": <span style =color:#87afd7>$1$2$3</span>") // JSON Strings
+            .replace(/([^>])(")(.*?)(")|([^>])(')(.*?)(')/g, "$1<span style =color:#afd700>$2$3$4</span>") // Strings
+            });
+      }
+      window.addEventListener("DOMContentLoaded", () => highlight(".highlight"));
     </script>
 
     <script src="heatmeal.js"></script>
@@ -53,25 +66,165 @@
       <h2>What is it?</h2>
       <p>A simple framework that enable HTML FORM to make all REST methods and enable any other elements to act as forms.</p>
       <h2>Usage</h2>
-      <p>You can use any HTTP method, including <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> and others instead of only <code>GET</code> and <code>POST</code>.</p>
       <p>The only requirement to make it work is a <code>target</code> attribute set to a classname or id.</p>
       <p>TIP: Open network inspector and check the requests in real time.</p>
 
+      <h3>Form methods</h3>
+      <p>You can use any HTTP method, including <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> and others instead of only <code>GET</code> and <code>POST</code>.</p>
+
 <pre class="highlight">
-&lt;form action="/example" method="DELETE" target=".first-example">
-  &lt;input type="submit" value="DELETE">
+&lt;form action="/example" method="DELETE" target=".example">
+  &lt;input hidden name="id" value="1">
+  &lt;input type="submit" value="DELETE FORM BUTTON">
 &lt/form>
+
+&lt;!-- OR -->
+
+&lt;form action="/example" target=".example">
+  &lt;input hidden name="_method" value="DELETE">
+  &lt;input hidden name="id" value="1">
+  &lt;input type="submit" value="DELETE FORM BUTTON">
+&lt/form>
+
+&lt;div class="example">&lt;/div>
 </pre>
 
-    <div class="example" onerror="this.innerHTML = event.message">Response should appear here</div>
+      <form action="/example" method="DELETE" target=".first.example" class="inline-block">
+        <input hidden name="id" value="1">
+        <input type="submit" value="DELETE FORM BUTTON">
+      </form>
+      <div class="first example" onerror="this.innerHTML = 'Resource with id 1 was deleted successfully'"></div>
+      <!-- This 'onerror' is only for demonstration purposes. Static website hosting doesn't implement other methods. -->
 
-    <form action="/example" method="GET" target=".example:nth-of-type(1)" class="inline-block">
-      <input type="submit" value="GET">
-    </form>
-    <form action="/example" method="DELETE" target=".example:nth-of-type(1)" class="inline-block">
-      <input type="submit" value="DELETE">
-    </form>
+      <h3>Link response</h3>
+      <p>You can render a link response into a <code>div</code> or any other HTML element. Just set a target attribute that references an classname or id.</p>
+
+<pre class="highlight">
+&lt;a href="/example" target=".example">Example Link&lt;/a>
+
+&lt;div class="example">&lt;/div>
+</pre>
+
+      <a href="/example.html" target=".second.example">Example Link</a>
+      <div class="second example"></div>
+
+      <h3>Using data-* attributes</h3>
+      <p>You can use dataset attributes to set method, action, target and request attributes instead of create a whole <code>form</code>.</p>
+
+<pre class="highlight">
+&lt;button
+  data-method="POST"
+  data-action="/example"
+  data-target=".example"
+  data-name="Example"
+>POST BUTTON&lt;/button>
+
+&lt;div class="example">&lt;/div>
+</pre>
+
+      <button
+        data-method="POST"
+        data-action="/example"
+        data-target=".third.example"
+        data-name="Example"
+      >POST BUTTON</button>
+      <div class="third example" onerror="this.innerHTML = 'Example was created successfully'"></div>
+      <!-- This 'onerror' is only for demonstration purposes. Static website hosting doesn't implement other methods. -->
+
+      <h2>Lifecycle</h2>
+      <p>You can call javascript functions before and after request execution just using <code>onchange</code> and <code>onload</code> HTML events. Errors can be handled by <code>onerror</code> event.</p>
+
+      <h3>Before - onchange</h3>
+      <p>The <code>onchange</code> event should be attached to the target element and will be dispatched before <code>fetch()</code> function be invoked. This is useful to create "Loading..." feedback messages.</p>
+
+<pre class="highlight">
+&lt;a href="/example" target=".example">Click to load&lt;/a>
+
+&lt;div class=".example" onchange="this.innerHTML = 'Loading...'">&lt;/div>
+</pre>
+
+      <a href="/example.html" target=".fourth.example">Click to load</a>
+      <div class="fourth example" onchange="this.innerHTML = 'Loading...'; setTimeout(() => alert('Press any key to continue'), 0)"></div>
+
+      <h3>After - onload</h3>
+      <p>The <code>ononload</code> event should be attached to the target element and will be dispatched after request return and it's content be rendered in target element.</p>
+
+<pre class="highlight">
+&lt;a href="/example.html" target=".example">Click to load&lt;/a>
+
+&lt;div class=".example" onload="this.classList.add('red')">&lt;/div>
+</pre>
+
+      <a href="/example.html" target=".fifth.example">Click to load</a>
+      <div class="fifth example" onchange="this.classList.remove('red')" onload="this.classList.add('red')"></div>
+
+      <h3>Error - onerror</h3>
+      <p>The <code>onerror</code> event should be attached to the target element and will be dispatched if request failed. The first paramenter will be the event object and the error message is event.message.</p>
+
+<pre class="highlight">
+&lt;a href="/example" data-method="POST" target=".example">Click to try to POST&lt;/a>
+
+&lt;div class=".example" onerror="this.innerHTML = event.message">&lt;/div>
+</pre>
+
+      <a href="/example" data-method="POST" target=".sixth.example">Click to try to POST</a>
+      <div class="sixth example" onerror="this.innerHTML = event.message"></div>
+
+      <h3>Other events</h3>
+      <p>Any other event will be dispatched as expected while using pure HTML. You can use <code>onclick</code> event to rise a confirmation dialog or a validator.</p>
+
+<pre class="highlight">
+&lt;button
+  onclick="!confirm('Are you sure?') && event.stopPropagation()"
+  data-method="GET"
+  data-href="/example.html"
+  data-target=".example"
+>CONFIRM BUTTON&lt;/button>
+
+&lt;div class=".example">&lt;/div>
+</pre>
+
+      <button
+        onclick="document.querySelector('.seventh.example').innerHTML = ''; !confirm('Are you sure?') && event.stopPropagation()"
+        data-method="GET"
+        data-href="/example.html"
+        data-target=".seventh.example"
+      >CONFIRM BUTTON</button>
+      <div class="seventh example"></div>
+
+      <h2>Rendering position</h2>
+      <p>Sometimes you may need to render the content in adjacent postion of target element or in other place. To handle this you can use <code>.insertAdjacentHTML()</code> positions  adding a data-position attribute.</p>
+
+<pre class="highlight">
+&lt;a href="/example.html" target=".example">Render&lt;/a>
+
+&lt;!-- beforebegin -->
+&lt;div class="example" data-position="beforebegin">
+  &lt;!-- afterbegin -->
+  Content
+  &lt;!-- beforeend -->
+&lt;/div>
+&lt;!-- afterend -->
+</pre>
+
+      <a href="/example.html" target=".eight.example">Render</a>
+      <br /><br />
+      <div class="eight example" data-position="beforebegin"><div><b>NEW CONTENT</b> beforebegin</div></div>
+      <div class="eight example" data-position="afterbegin"><div><b>NEW CONTENT</b> afterbegin</div></div>
+      <div class="eight example" data-position="beforeend"><div><b>NEW CONTENT</b> beforeend</div></div>
+      <div class="eight example" data-position="afterend"><div><b>NEW CONTENT</b> afterend</div></div>
+
+      <h2>Check the code</h2>
+      <p>See what's happening behind the scenes. Don't be afraid, is less than 50 lines of code.</p>
+      <a href="/heatmeal.js" target=".sourcecode">heatmeal.js</a>
+      <pre class="sourcecode" onload="highlight('.sourcecode')"></pre>
+
+      <h2>License</h2>
+      <p>MIT</p>
 
     </main>
+    <footer>
+      Made for fun by <a href="https://gogs.com.br" target="_blank">Henrique Gogó</a>
+    </footer>
   </body>
 </html>
