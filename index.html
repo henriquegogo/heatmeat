@@ -89,7 +89,7 @@
 &lt;div class="example">&lt;/div>
 </pre>
 
-      <form action="/example" method="DELETE" target=".first.example" class="inline-block">
+      <form action="./example" method="DELETE" target=".first.example" class="inline-block">
         <input hidden name="id" value="1">
         <input type="submit" value="DELETE FORM BUTTON">
       </form>
@@ -105,7 +105,7 @@
 &lt;div class="example">&lt;/div>
 </pre>
 
-      <a href="/example.html" target=".second.example">Example Link</a>
+      <a href="./example.html" target=".second.example">Example Link</a>
       <div class="second example"></div>
 
       <h3>Using data-* attributes</h3>
@@ -124,7 +124,7 @@
 
       <button
         data-method="POST"
-        data-action="/example"
+        data-action="./example"
         data-target=".third.example"
         data-name="Example"
       >POST BUTTON</button>
@@ -143,7 +143,7 @@
 &lt;div class=".example" onchange="this.innerHTML = 'Loading...'">&lt;/div>
 </pre>
 
-      <a href="/example.html" target=".fourth.example">Click to load</a>
+      <a href="./example.html" target=".fourth.example">Click to load</a>
       <div class="fourth example" onchange="this.innerHTML = 'Loading...'; setTimeout(() => alert('Press any key to continue'), 0)"></div>
 
       <h3>After - onload</h3>
@@ -155,7 +155,7 @@
 &lt;div class=".example" onload="this.classList.add('red')">&lt;/div>
 </pre>
 
-      <a href="/example.html" target=".fifth.example">Click to load</a>
+      <a href="./example.html" target=".fifth.example">Click to load</a>
       <div class="fifth example" onchange="this.classList.remove('red')" onload="this.classList.add('red')"></div>
 
       <h3>Error - onerror</h3>
@@ -167,7 +167,7 @@
 &lt;div class=".example" onerror="this.innerHTML = event.message">&lt;/div>
 </pre>
 
-      <a href="/example" data-method="POST" target=".sixth.example">Click to try to POST</a>
+      <a href="./example" data-method="POST" target=".sixth.example">Click to try to POST</a>
       <div class="sixth example" onerror="this.innerHTML = event.message"></div>
 
       <h3>Other events</h3>
@@ -187,7 +187,7 @@
       <button
         onclick="document.querySelector('.seventh.example').innerHTML = ''; !confirm('Are you sure?') && event.stopPropagation()"
         data-method="GET"
-        data-href="/example.html"
+        data-href="./example.html"
         data-target=".seventh.example"
       >CONFIRM BUTTON</button>
       <div class="seventh example"></div>
@@ -207,7 +207,7 @@
 &lt;!-- afterend -->
 </pre>
 
-      <a href="/example.html" target=".eight.example">Render</a>
+      <a href="./example.html" target=".eight.example">Render</a>
       <br /><br />
       <div class="eight example" data-position="beforebegin"><div><b>NEW CONTENT</b> beforebegin</div></div>
       <div class="eight example" data-position="afterbegin"><div><b>NEW CONTENT</b> afterbegin</div></div>
