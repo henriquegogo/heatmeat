@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>heatmeal.js - How pure HTML should be</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Code+Latin:wght@100..700&display=swap');
+      html { font-family: "M PLUS Code Latin", sans-serif; font-size: 1.2rem; color: #CCC; background: #222; }
+      body { margin: 0 auto; }
+      header { padding: 40px 10px; background:#2e2e2e; border-bottom: 2px solid #444; }
+      header h1, header h3 { margin: 0; }
+      header h1 { font-size: 3rem; text-align: center; }
+      header h3 { text-align: center; }
+      main { margin: 0 auto; padding: 30px 10px; max-width: 700px; }
+      h1, h2, h3, h4, h5, h6 { font-weight: 500; color: #FFF; }
+      a { color: #CCC; }
+      button, input[type=submit] {
+        padding: 10px 20px;
+        font-family: inherit; font-size: 1.0rem; color: #CCC;
+        cursor: pointer; background: #333; border: none;
+      }
+      code { padding: 1px 4px; font-size: 0.9rem; font-weight: bold; border: 1px solid #DDD; }
+      .red { color: #B22; }
+      .gray { color: #555; }
+      .inline-block { display: inline-block; }
+      .example { padding: 25px; color: #FFF; background: #333; }
+    </style>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".highlight").forEach((element) => {
+          Object.assign(element.style, {
+            backgroundColor: "#333", color: "#FFF", fontFamily: "monospace", padding: "25px", whiteSpace: "pre-wrap"
+          });
+          element.innerHTML = element.innerHTML
+            .replace(/(&lt;!--.+--&gt;)/gs, "<span style =color:#808080>$1</span>") // Comments
+            .replace(/(\w+)=/g, "<span style =color:#87afd7>$1</span>=") // Attributes
+            .replace(/([^>])(")(.*?)(")|([^>])(')(.*?)(')/g, "$1<span style =color:#afd700>$2$3$4</span>") // Strings
+            .replace(/&lt;(\w*)/g, "<span style =color:#87afd7>&lt;</span><span style =color:#8787af>$1</span>") // Tag open
+            .replace(/(\w*)&gt;/g, "<span style =color:#8787af>$1</span><span style =color:#87afd7>&gt;</span>") // Tag close
+        });
+      });
+    </script>
+
+    <script src="heatmeal.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>heat<span class="red">meal</span><span class="gray">.js</span></h1>
+      <h3>How pure HTML should be</h3>
+    </header>
+    <main>
+      <h2>What is it?</h2>
+      <p>A simple framework that enable HTML FORM to make all REST methods and enable any other elements to act as forms.</p>
+      <h2>Usage</h2>
+      <p>You can use any HTTP method, including <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> and others instead of only <code>GET</code> and <code>POST</code>.</p>
+      <p>The only requirement to make it work is a <code>target</code> attribute set to a classname or id.</p>
+      <p>TIP: Open network inspector and check the requests in real time.</p>
+
+<pre class="highlight">
+&lt;form action="/example" method="DELETE" target=".first-example">
+  &lt;input type="submit" value="DELETE">
+&lt/form>
+</pre>
+
+    <div class="example" onerror="this.innerHTML = event.message">Response should appear here</div>
+
+    <form action="/example" method="GET" target=".example:nth-of-type(1)" class="inline-block">
+      <input type="submit" value="GET">
+    </form>
+    <form action="/example" method="DELETE" target=".example:nth-of-type(1)" class="inline-block">
+      <input type="submit" value="DELETE">
+    </form>
+
+    </main>
+  </body>
+</html>
