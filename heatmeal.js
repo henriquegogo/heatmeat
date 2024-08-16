@@ -38,8 +38,8 @@
         else el.insertAdjacentHTML(position, text);
         el.dispatchEvent(new Event("load"));
       }))
-      .catch((err) => targetElements.forEach((el) =>
-        el.dispatchEvent(new ErrorEvent("error", { message: err })))
-      );
+      .catch((err) => targetElements.forEach((el) => el.dispatchEvent(
+        new ErrorEvent("error", { message: err.statusText || err.status })
+      )));
   });
 });
