@@ -17,7 +17,7 @@ TIP: Open network inspector and check the requests in real time.
 
 You can use any HTTP method, including `PUT`, `DELETE`, `PATCH` and others instead of only `GET` and `POST`.
 
-```
+```html
 <script src="heatmeal.js"></script>
 
 <form action="/example" method="DELETE" target=".example">
@@ -28,7 +28,7 @@ You can use any HTTP method, including `PUT`, `DELETE`, `PATCH` and others inste
 <!-- OR -->
 
 <form action="/example" target=".example">
-  <input hidden name="\_method" value="DELETE">
+  <input hidden name="_method" value="DELETE">
   <input hidden name="id" value="1">
   <input type="submit" value="DELETE FORM BUTTON">
 </form>
@@ -40,17 +40,17 @@ You can use any HTTP method, including `PUT`, `DELETE`, `PATCH` and others inste
 
 You can render a link response into a `div` or any other HTML element. Just set a target attribute that references an classname or id.
 
-```
+```html
 <a href="/example" target=".example">Example Link</a>
 
 <div class="example"></div>
 ```
 
-### Using data-\* attributes
+### Using data-* attributes
 
 You can use dataset attributes to set method, action, target and request attributes instead of create a whole `form`.
 
-```
+```html
 <button
   data-method="POST"
   data-action="/example"
@@ -70,7 +70,7 @@ You can call javascript functions before and after request execution just using 
 
 The `onchange` event should be attached to the target element and will be dispatched before `fetch()` function be invoked. This is useful to create "Loading..." feedback messages.
 
-```
+```html
 <a href="/example" target=".example">Click to load</a>
 
 <div class=".example" onchange="this.innerHTML = 'Loading...'"></div>
@@ -80,7 +80,7 @@ The `onchange` event should be attached to the target element and will be dispat
 
 The `ononload` event should be attached to the target element and will be dispatched after request return and it's content be rendered in target element.
 
-```
+```html
 <a href="/example.html" target=".example">Click to load</a>
 
 <div class=".example" onload="this.classList.add('red')"></div>
@@ -90,7 +90,7 @@ The `ononload` event should be attached to the target element and will be dispat
 
 The `onerror` event should be attached to the target element and will be dispatched if request failed. The first paramenter will be the event object and the error message is event.message.
 
-```
+```html
 <a href="/example" data-method="POST" target=".example">Click to try to POST</a>
 
 <div class=".example" onerror="this.innerHTML = event.message"></div>
@@ -100,7 +100,7 @@ The `onerror` event should be attached to the target element and will be dispatc
 
 Any other event will be dispatched as expected while using pure HTML. You can use `onclick` event to rise a confirmation dialog or a validator.
 
-```
+```html
 <button
   onclick="!confirm('Are you sure?') && event.stopPropagation()"
   data-method="GET"
@@ -116,7 +116,7 @@ Rendering position
 
 Sometimes you may need to render the content in adjacent postion of target element or in other place. To handle this you can use `.insertAdjacentHTML()` positions adding a data-position attribute.
 
-```
+```html
 <a href="/example.html" target=".example">Render</a>
 
 <!-- beforebegin -->
@@ -130,5 +130,4 @@ Sometimes you may need to render the content in adjacent postion of target eleme
 
 License
 -------
-
 MIT
