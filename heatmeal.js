@@ -9,7 +9,7 @@
     ]));
 
     // Default behavior if target is not defined or is not a selector
-    if (!target || !["#", "."].includes(target[0])) return;
+    if (!target || target.startsWith("_")) return;
     ev.preventDefault();
 
     // Initialize formData with form fields and data-* attributes
@@ -35,8 +35,9 @@
         const position = el.dataset.position || "innerHTML";
         if (position.startsWith("inner") || position.startsWith("outer"))
           el[position] = text;
-        else el.insertAdjacentHTML(position, text);
-        el.dispatchEvent(new Event("load"));
+        else if (position.startsWith("before") || position.startsWith("after"))
+          el.insertAdjacentHTML(position, text);
+        el.dispatchEvent(new CustomEvent("load", { detail: JSON.parse(text) }));
       }))
       .catch((err) => targetElements.forEach((el) => el.dispatchEvent(
         new ErrorEvent("error", { message: err.statusText || err.status })

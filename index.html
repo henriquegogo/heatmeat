@@ -191,6 +191,19 @@
       <div class="eight example" data-position="beforeend"><div><b>NEW CONTENT</b> beforeend</div></div>
       <div class="eight example" data-position="afterend"><div><b>NEW CONTENT</b> afterend</div></div>
 
+      <h2>JSON requests</h2>
+      <p>What if the request response is a JSON and I want to adapt a template engine to it? Just set an unknown data-position and the "onload" event.detail will be the JSON.</p>
+
+<pre class="highlight">
+&lt;a href="./example.json" target=".example">Render&lt;/a>
+
+&lt;div class="example" data-position="-" onload="console.log(event.detail); alert(event.detail)">&lt;/div>
+</pre>
+
+      <a href="./example.json" target=".ninth.example">Make request</a>
+      <br /><br />
+      <div class="ninth example" data-position="-" onload="console.log(event.detail); this.innerHTML = 'Check the console'"></div>
+
       <h2>Check the code</h2>
       <p>See what's happening behind the scenes. Don't be afraid, is less than 50 lines of code.</p>
       <a href="./heatmeal.js" target=".sourcecode">heatmeal.js</a>
