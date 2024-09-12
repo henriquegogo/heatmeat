@@ -197,29 +197,20 @@
 <pre class="highlight">
 &lt;a href="./example.json" target=".example">Render&lt;/a>
 
-&lt;div class="example" data-position="-" onload="render(event.detail, this)">&lt;/div>
+&lt;div class="ninth example" data-position="-" onload="this.innerHTML = (({ name, description }) => `
 
-&lt;script>
-  function render(obj, target) {
-    target.innerHTML = `
-      &lt;h1>name: ${obj.name}&lt;/h1>
-      &lt;p>description: ${obj.description}&lt;/p>
-    `;
-  }
-&lt;/script>
+  &lt;h1>name: ${name}&lt;/h1>
+  &lt;p>description: ${description}&lt;/p>
+
+`)(event.detail)">&lt;/div>
 </pre>
 
       <a href="./example.json" target=".ninth.example">Make request</a>
       <br /><br />
-      <div class="ninth example" data-position="-" onload="render(event.detail, this)"></div>
-      <script>
-        function render(obj, target) {
-          target.innerHTML = `
-            <h1>name: ${obj.name}</h1>
-            <p>description: ${obj.description}</p>
-          `;
-        }
-      </script>
+      <div class="ninth example" data-position="-" onload="this.innerHTML = (({ name, description }) => `
+        <h1>name: ${name}</h1>
+        <p>description: ${description}</p>
+      `)(event.detail)"></div>
 
       <h2>Check the code</h2>
       <p>See what's happening behind the scenes. Don't be afraid, is less than 50 lines of code.</p>
