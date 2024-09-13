@@ -37,7 +37,9 @@
           el[position] = text;
         else if (position.startsWith("before") || position.startsWith("after"))
           el.insertAdjacentHTML(position, text);
-        el.dispatchEvent(new CustomEvent("load", { detail: JSON.parse(text) }));
+        el.dispatchEvent(new CustomEvent("load", {
+          detail: text.startsWith("{") ? JSON.parse(text) : text
+        }));
       }))
       .catch((err) => targetElements.forEach((el) => el.dispatchEvent(
         new ErrorEvent("error", { message: err.statusText || err.status })
