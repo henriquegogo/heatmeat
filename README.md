@@ -1,4 +1,4 @@
-# heatmeat
+# heatmeal
 How pure HTML should be
 
 What is it?
